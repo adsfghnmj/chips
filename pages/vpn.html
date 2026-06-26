@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>VPN | CHIPS</title>
+
+<link rel="stylesheet" href="../style.css">
+
+<style>
+
+.vpn-card{
+    width:600px;
+    max-width:95%;
+    padding:40px;
+    border-radius:30px;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(25px);
+    border:1px solid rgba(255,255,255,.15);
+    text-align:center;
+}
+
+.status{
+    margin:25px 0;
+    font-size:22px;
+}
+
+.pending{
+    color:#ffcc00;
+}
+
+.approved{
+    color:#00ff88;
+}
+
+.rejected{
+    color:#ff5555;
+}
+
+.reason{
+    margin-top:20px;
+    color:#ff7777;
+}
+
+.vpn-link{
+    margin-top:20px;
+    display:block;
+    color:#00ff88;
+    word-break:break-all;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="background-grid"></div>
+<div class="mouse-light"></div>
+
+<header class="navbar">
+
+<div class="logo">
+CHIPS
+</div>
+
+<nav>
+
+<a href="../index.html">
+Home
+</a>
+
+<a href="dashboard.html">
+Dashboard
+</a>
+
+</nav>
+
+</header>
+
+<section class="hero">
+
+<div class="vpn-card">
+
+<h1>VPN Request</h1>
+
+<div id="content">
+
+Loading...
+
+</div>
+
+</div>
+
+</section>
+
+<script>
+
+const token =
+localStorage.getItem(
+"chips_token"
+);
+
+if(!token){
+
+window.location.href =
+"login.html";
+
+}
+
+async function loadVPN(){
+
+try{
+
+const res =
+await fetch(
+"https://YOUR-WORKER.workers.dev/vpn",
+{
+headers:{
+Authorization:
+"Bearer "+token
+}
+}
+);
+
+const data =
+await res.json();
+
+const box =
+document.getElementById(
+"content"
+);
+
+if(data.noRequest){
+
+box.innerHTML=`
+
+<p>
+
+You haven't requested a VPN yet.
+
+</p>
+
+<br>
+
+<button
+class="glass-btn vpn-btn"
+onclick="requestVPN()">
+
+Request VPN
+
+</button>
+
+`;
+
+return;
+}
+
+if(data.status==="pending"){
+
+box.innerHTML=`
+
+<div class="status pending">
+
+🟡 Pending
+
+</div>
+
+<p>
+
+Your request is waiting for approval.
+
+</p>
+
+`;
+
+}
+
+if(data.status==="approved"){
+
+box.innerHTML=`
+
+<div class="status approved">
+
+🟢 Approved
+
+</div>
+
+<a
+class="vpn-link"
+href="${data.vpnLink}"
+target="_blank">
+
+${data.vpnLink}
+
+</a>
+
+<br><br>
+
+<a
+class="glass-btn"
+href="${data.video}"
+target="_blank">
+
+Tutorial Video
+
+</a>
+
+`;
+
+}
+
+if(data.status==="rejected"){
+
+box.innerHTML=`
+
+<div class="status rejected">
+
+🔴 Rejected
+
+</div>
+
+<div class="reason">
+
+${data.reason}
+
+</div>
+
+`;
+
+}
+
+}
+catch{
+
+document.getElementById(
+"content"
+).innerHTML=
+"Server error.";
+
+}
+
+}
+
+async function requestVPN(){
+
+await fetch(
+"https://YOUR-WORKER.workers.dev/vpn/request",
+{
+method:"POST",
+headers:{
+Authorization:
+"Bearer "+token
+}
+}
+);
+
+loadVPN();
+
+}
+
+loadVPN();
+
+</script>
+
+<script src="../script.js"></script>
+
+</body>
+</html>

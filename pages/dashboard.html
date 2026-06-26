@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard | CHIPS</title>
+
+<link rel="stylesheet" href="../style.css">
+
+<style>
+
+.dashboard-card{
+    width:700px;
+    max-width:95%;
+    padding:40px;
+    border-radius:30px;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(25px);
+    border:1px solid rgba(255,255,255,.15);
+}
+
+.info{
+    margin-top:20px;
+    line-height:2;
+    font-size:18px;
+}
+
+.status{
+    margin-top:30px;
+    font-size:24px;
+}
+
+.pending{
+    color:#ffcc00;
+}
+
+.approved{
+    color:#00ff88;
+}
+
+.rejected{
+    color:#ff5555;
+}
+
+.buttons{
+    margin-top:35px;
+}
+
+.vpn-link{
+    display:block;
+    margin-top:20px;
+    color:#00ff88;
+    word-break:break-all;
+}
+
+.reason{
+    margin-top:20px;
+    color:#ff7777;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="background-grid"></div>
+<div class="mouse-light"></div>
+
+<header class="navbar">
+
+<div class="logo">
+CHIPS
+</div>
+
+<nav>
+
+<a href="../index.html">
+Home
+</a>
+
+<a href="vpn.html">
+VPN
+</a>
+
+</nav>
+
+</header>
+
+<section class="hero">
+
+<div class="dashboard-card">
+
+<h1>Dashboard</h1>
+
+<div id="dashboard">
+
+Loading...
+
+</div>
+
+</div>
+
+</section>
+
+<script>
+
+const token =
+localStorage.getItem(
+"chips_token"
+);
+
+if(!token){
+
+window.location.href =
+"login.html";
+
+}
+
+async function loadDashboard(){
+
+try{
+
+const res =
+await fetch(
+"https://YOUR-WORKER.workers.dev/dashboard",
+{
+headers:{
+Authorization:
+"Bearer "+token
+}
+}
+);
+
+const data =
+await res.json();
+
+document.getElementById(
+"dashboard"
+).innerHTML = `
+
+<div class="info">
+
+Username:
+${data.user.username}
+
+<br>
+
+Email:
+${data.user.email}
+
+</div>
+
+<div class="status ${data.status}">
+
+${data.status==="pending" ?
+"🟡 Pending" : ""}
+
+${data.status==="approved" ?
+"🟢 Approved" : ""}
+
+${data.status==="rejected" ?
+"🔴 Rejected" : ""}
+
+</div>
+
+${data.status==="approved" ? `
+<a
+class="vpn-link"
+href="${data.vpnLink}"
+target="_blank">
+
+${data.vpnLink}
+
+</a>
+
+<br>
+
+<a
+class="glass-btn"
+href="${data.video}"
+target="_blank">
+
+Tutorial Video
+
+</a>
+` : ""}
+
+${data.status==="rejected" ? `
+<div class="reason">
+
+Reason:
+${data.reason}
+
+</div>
+` : ""}
+
+<div class="buttons">
+
+<a
+href="vpn.html"
+class="glass-btn vpn-btn">
+
+VPN
+
+</a>
+
+<a
+href="https://donofa.ir/chipsowner/"
+target="_blank"
+class="glass-btn donate-btn">
+
+Donate
+
+</a>
+
+<a
+href="../index.html"
+class="glass-btn">
+
+Back Home
+
+</a>
+
+</div>
+
+`;
+
+}
+catch{
+
+document.getElementById(
+"dashboard"
+).innerHTML =
+"Cannot connect to server.";
+
+}
+
+}
+
+loadDashboard();
+
+</script>
+
+<script src="../script.js"></script>
+
+</body>
+</html>
