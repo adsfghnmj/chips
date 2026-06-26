@@ -3,98 +3,213 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>CHIPS</title>
+    <title>CHIPS</title>
 
-<link rel="stylesheet" href="style.css">
+    <meta name="theme-color" content="#ff8a00">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="icon" href="favicon.ico">
 
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="style.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
-<link rel="icon" href="https://s34.picofile.com/file/8490721676/IMG_9562.png">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 </head>
 
 <body>
 
-<div class="background">
-
-<div class="grid"></div>
-
-<div class="noise"></div>
+<div class="background-grid"></div>
 
 <div class="mouse-light"></div>
 
-<div class="glow glow1"></div>
+<header class="navbar">
 
-<div class="glow glow2"></div>
+    <div class="logo">
+        CHIPS
+    </div>
 
-<canvas id="particles"></canvas>
+    <nav>
 
-</div>
+        <a href="#">Home</a>
 
-<main class="hero">
+        <a href="#vpn">VPN</a>
 
-<div class="chips-area">
+        <a href="#about">About</a>
 
-<img
-id="chips"
-src="https://s34.picofile.com/file/8490721676/IMG_9562.png"
-alt="chips">
+        <a href="#support">Support</a>
 
-</div>
+    </nav>
 
-<h1 class="logo">
+</header>
 
-<span>C</span>
-<span>H</span>
-<span>I</span>
-<span>P</span>
-<span>S</span>
+<section class="hero">
 
-</h1>
+    <div class="chips-area">
 
-<p class="subtitle">
+        <img
 
-The Crunch Never Stops
+        id="chips"
 
-</p>
+        src="https://s34.picofile.com/file/8490721676/IMG_9562.png"
 
-<a
+        alt="CHIPS">
 
-class="donate"
+    </div>
 
-href="https://donofa.ir/chipsowner/"
+    <h1 class="rgb-title">
 
-target="_blank">
+        CHIPS
 
-<svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+    </h1>
 
-<path d="M12 21s-7-4.4-7-11A4 4 0 0 1 12 7a4 4 0 0 1 7 3c0 6.6-7 11-7 11z"
+    <p class="subtitle">
 
-fill="currentColor"/>
+        Fast • Secure • Modern
 
-</svg>
+    </p>
 
-Donate
+    <div class="buttons">
 
-</a>
+        <a
 
-</main>
+        href="pages/vpn.html"
+
+        class="glass-btn vpn-btn">
+
+            🟢 VPN
+
+        </a>
+
+        <a
+
+        href="https://donofa.ir/chipsowner/"
+
+        target="_blank"
+
+        class="glass-btn donate-btn">
+
+            ❤️ Donate
+
+        </a>
+
+    </div>
+
+</section>
+
+<section class="about" id="about">
+
+    <h2>
+
+        About CHIPS
+
+    </h2>
+
+    <p>
+
+        CHIPS is a modern VPN platform with a beautiful interface,
+        smooth animations, secure login system and an easy request panel.
+
+    </p>
+
+</section>
+
+<section id="vpn" class="vpn-preview">
+
+    <h2>
+
+        VPN
+
+    </h2>
+
+    <p>
+
+        Register an account and request your VPN in seconds.
+
+    </p>
+
+    <a
+
+    href="pages/vpn.html"
+
+    class="glass-btn vpn-btn">
+
+        Request VPN
+
+    </a>
+
+</section>
+<!-- DONATE -->
+
+<section class="donate">
+
+    <h2>Support CHIPS ❤️</h2>
+
+    <p>
+        Every donation helps us improve CHIPS and keep the VPN service running.
+    </p>
+
+    <a
+        href="https://donofa.ir/chipsowner/"
+        target="_blank"
+        class="glass-btn donate-btn">
+
+        ❤️ Donate
+
+    </a>
+
+</section>
+
+<!-- SUPPORT -->
+
+<section id="support">
+
+    <h2>Support</h2>
+
+    <p>
+
+        Need help? Contact me on Bale.
+
+    </p>
+
+    <a
+        href="https://ble.ir/inotmohammadreza"
+        target="_blank"
+        class="glass-btn support-btn">
+
+        💬 Bale Support
+
+    </a>
+
+</section>
+
+<!-- FOOTER -->
 
 <footer>
 
-<div>
+    <div class="footer-content">
 
-by <span>kill.switcher</span>
+        <h3>CHIPS</h3>
 
-</div>
+        <p>
+
+            © 2026 CHIPS. All rights reserved.
+
+        </p>
+
+        <p class="powered">
+
+            Powered by BPB
+
+        </p>
+
+    </div>
 
 </footer>
 

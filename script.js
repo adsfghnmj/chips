@@ -1,153 +1,156 @@
-// -------------------------------
-// CHIPS V2
-// -------------------------------
+// ==========================
+// CHIPS V3
+// ==========================
+
+// Chips Follow Mouse
 
 const chips = document.getElementById("chips");
-const mouseLight = document.querySelector(".mouse-light");
-const canvas = document.getElementById("particles");
-const ctx = canvas.getContext("2d");
-
-// ---------- Canvas ----------
-
-function resizeCanvas(){
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-}
-
-resizeCanvas();
-
-window.addEventListener("resize",resizeCanvas);
-
-// ---------- Mouse ----------
-
-let mouse = {
-
-x:window.innerWidth/2,
-y:window.innerHeight/2
-
-};
-
-let target = {
-
-x:0,
-y:0
-
-};
-
-let current = {
-
-x:0,
-y:0
-
-};
 
 document.addEventListener("mousemove",(e)=>{
 
-mouse.x=e.clientX;
-mouse.y=e.clientY;
+    const x=(e.clientX-window.innerWidth/2)/25;
 
-mouseLight.style.left=e.clientX+"px";
-mouseLight.style.top=e.clientY+"px";
+    const y=(e.clientY-window.innerHeight/2)/25;
 
-const centerX=window.innerWidth/2;
-const centerY=window.innerHeight/2;
-
-target.x=(e.clientX-centerX)/centerX;
-target.y=(e.clientY-centerY)/centerY;
+    chips.style.transform=
+    `rotateY(${x}deg)
+     rotateX(${-y}deg)
+     translate(${x}px,${y}px)`;
 
 });
 
-// ---------- Chips Animation ----------
+// ==========================
+// Mouse Light
 
-function animateChips(){
+const light=document.querySelector(".mouse-light");
 
-current.x+=(target.x-current.x)*0.08;
-current.y+=(target.y-current.y)*0.08;
+document.addEventListener("mousemove",(e)=>{
 
-const moveX=current.x*30;
-const moveY=current.y*30;
+    light.style.left=e.clientX+"px";
 
-const rotateY=current.x*18;
-const rotateX=current.y*-18;
+    light.style.top=e.clientY+"px";
 
-chips.style.transform=`
+});
 
-translate(${moveX}px,${moveY}px)
+// ==========================
+// Navbar Blur
 
-rotateX(${rotateX}deg)
+const navbar=document.querySelector(".navbar");
 
-rotateY(${rotateY}deg)
+window.addEventListener("scroll",()=>{
 
-`;
+    if(window.scrollY>40){
 
-requestAnimationFrame(animateChips);
+        navbar.style.background="rgba(15,15,15,.65)";
+
+        navbar.style.backdropFilter="blur(30px)";
+
+    }
+
+    else{
+
+        navbar.style.background="rgba(255,255,255,.08)";
+
+        navbar.style.backdropFilter="blur(20px)";
+
+    }
+
+});
+
+// ==========================
+// Fade In Sections
+
+const sections=document.querySelectorAll("section");
+
+const observer=new IntersectionObserver((entries)=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.style.opacity="1";
+
+entry.target.style.transform="translateY(0)";
 
 }
 
-animateChips();
-
-// ---------- Particles ----------
-
-const particles=[];
-
-for(let i=0;i<55;i++){
-
-particles.push({
-
-x:Math.random()*canvas.width,
-
-y:Math.random()*canvas.height,
-
-r:Math.random()*2+1,
-
-vx:(Math.random()-.5)*0.3,
-
-vy:(Math.random()-.5)*0.3,
-
-a:Math.random()
+});
 
 });
+
+sections.forEach(section=>{
+
+section.style.opacity="0";
+
+section.style.transform="translateY(60px)";
+
+section.style.transition=".8s";
+
+observer.observe(section);
+
+});
+
+// ==========================
+// Buttons Hover
+
+document.querySelectorAll(".glass-btn").forEach(btn=>{
+
+btn.addEventListener("mouseenter",()=>{
+
+btn.style.transform="translateY(-6px) scale(1.03)";
+
+});
+
+btn.addEventListener("mouseleave",()=>{
+
+btn.style.transform="translateY(0) scale(1)";
+
+});
+
+});
+
+// ==========================
+// Hero Animation
+
+window.onload=()=>{
+
+document.querySelector(".hero").animate([
+
+{
+
+opacity:0,
+
+transform:"translateY(50px)"
+
+},
+
+{
+
+opacity:1,
+
+transform:"translateY(0)"
 
 }
 
-function drawParticles(){
+],{
 
-ctx.clearRect(0,0,canvas.width,canvas.height);
+duration:1000,
 
-particles.forEach(p=>{
-
-p.x+=p.vx;
-p.y+=p.vy;
-
-if(p.x<0)p.x=canvas.width;
-if(p.x>canvas.width)p.x=0;
-
-if(p.y<0)p.y=canvas.height;
-if(p.y>canvas.height)p.y=0;
-
-ctx.beginPath();
-
-ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-
-ctx.fillStyle=`rgba(255,190,80,${p.a*0.35})`;
-
-ctx.fill();
+fill:"forwards"
 
 });
 
-requestAnimationFrame(drawParticles);
+};
+// ==========================
+// Mobile Menu
+// ==========================
 
-}
+const menu=document.querySelector(".menu-toggle");
 
-drawParticles();
+const nav=document.querySelector("nav");
 
-// ---------- Leave ----------
+menu.onclick=()=>{
 
-document.addEventListener("mouseleave",()=>{
+nav.classList.toggle("active");
 
-target.x=0;
-target.y=0;
-
-});
+};
