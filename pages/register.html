@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -69,23 +70,12 @@
 <div class="mouse-light"></div>
 
 <header class="navbar">
-
-<div class="logo">
-CHIPS
-</div>
+<div class="logo">CHIPS</div>
 
 <nav>
-
-<a href="../index.html">
-Home
-</a>
-
-<a href="login.html">
-Login
-</a>
-
+<a href="../index.html">Home</a>
+<a href="login.html">Login</a>
 </nav>
-
 </header>
 
 <section class="hero">
@@ -96,36 +86,16 @@ Login
 
 <form id="registerForm">
 
-<input
-type="text"
-id="username"
-placeholder="Username"
-required>
+<input type="text" id="username" placeholder="Username" required>
 
-<input
-type="email"
-id="email"
-placeholder="Email"
-required>
+<input type="email" id="email" placeholder="Email" required>
 
-<input
-type="password"
-id="password"
-placeholder="Password"
-required>
+<input type="password" id="password" placeholder="Password" required>
 
-<input
-type="password"
-id="confirmPassword"
-placeholder="Confirm Password"
-required>
+<input type="password" id="confirmPassword" placeholder="Confirm Password" required>
 
-<button
-type="submit"
-class="glass-btn vpn-btn">
-
+<button type="submit" class="glass-btn vpn-btn">
 Create Account
-
 </button>
 
 </form>
@@ -133,15 +103,8 @@ Create Account
 <div id="message"></div>
 
 <p>
-
 Already have an account?
-
-<a href="login.html">
-
-Login
-
-</a>
-
+<a href="login.html">Login</a>
 </p>
 
 </div>
@@ -158,12 +121,9 @@ document.getElementById("message");
 
 form.addEventListener(
 "submit",
-async(e)=>{
+(e)=>{
 
 e.preventDefault();
-
-message.innerHTML =
-"Creating account...";
 
 const username =
 document.getElementById("username").value;
@@ -177,7 +137,7 @@ document.getElementById("password").value;
 const confirm =
 document.getElementById("confirmPassword").value;
 
-if(password!==confirm){
+if(password !== confirm){
 
 message.innerHTML =
 "Passwords do not match.";
@@ -186,28 +146,38 @@ return;
 
 }
 
-try{
-
-const res =
-await fetch(
-"https://YOUR-WORKER.workers.dev/register",
-{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-username,
-email,
-password
-})
-}
+let users =
+JSON.parse(
+localStorage.getItem("chips_users")
+|| "[]"
 );
 
-const data =
-await res.json();
+if(
+users.find(
+u => u.email === email
+)
+){
 
-if(data.success){
+message.innerHTML =
+"Email already exists.";
+
+return;
+
+}
+
+users.push({
+
+username,
+email,
+password,
+role:"user"
+
+});
+
+localStorage.setItem(
+"chips_users",
+JSON.stringify(users)
+);
 
 message.innerHTML =
 "Account created successfully.";
@@ -219,23 +189,6 @@ window.location.href =
 
 },1500);
 
-}
-else{
-
-message.innerHTML =
-data.message ||
-"Registration failed.";
-
-}
-
-}
-catch{
-
-message.innerHTML =
-"Cannot connect to server.";
-
-}
-
 });
 
 </script>
@@ -244,3 +197,4 @@ message.innerHTML =
 
 </body>
 </html>
+```
