@@ -1,3 +1,4 @@
+```html id="kwqtwg"
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,17 +62,17 @@ flex-wrap:wrap;
 <header class="navbar">
 
 <div class="logo">
-
 CHIPS
-
 </div>
 
 <nav>
 
 <a href="../index.html">
-
 Home
+</a>
 
+<a href="dashboard.html">
+Dashboard
 </a>
 
 </nav>
@@ -100,37 +101,80 @@ Loading...
 
 <script>
 
-const token =
+const user =
+JSON.parse(
 localStorage.getItem(
-"chips_token"
+"chips_user"
+)
 );
 
-if(!token){
+if(!user){
 
 window.location.href =
 "login.html";
 
 }
 
-async function loadRequests(){
+const isAdmin =
 
-const res =
-await fetch(
-"https://YOUR-WORKER.workers.dev/admin",
-{
-headers:{
-Authorization:
-"Bearer "+token
-}
-}
+(
+user.email ===
+"inotmohamamdreza@gmail.com"
+&&
+user.password ===
+"112233mo"
+)
+
+||
+
+(
+user.email ===
+"andrwydyha@gmail.com"
+&&
+user.password ===
+"112233Mo"
 );
 
+if(!isAdmin){
+
+window.location.href =
+"dashboard.html";
+
+}
+
+function loadRequests(){
+
 const data =
-await res.json();
+JSON.parse(
+localStorage.getItem(
+"vpn_requests"
+)
+|| "[]"
+);
 
 let html = "";
 
-data.requests.forEach(r=>{
+if(data.length===0){
+
+html =
+`
+<p>
+
+No VPN requests.
+
+</p>
+`;
+
+document.getElementById(
+"requests"
+).innerHTML =
+html;
+
+return;
+
+}
+
+data.forEach(r=>{
 
 html += `
 
@@ -197,67 +241,97 @@ Reject
 
 document.getElementById(
 "requests"
-).innerHTML = html;
+).innerHTML =
+html;
 
 }
 
-async function approve(id){
+function approve(id){
 
-const vpn =
+const data =
+JSON.parse(
+localStorage.getItem(
+"vpn_requests"
+)
+|| "[]"
+);
+
+const req =
+data.find(
+r=>r.id===id
+);
+
+if(!req){
+
+return;
+
+}
+
+req.status =
+"approved";
+
+req.vpnLink =
 document.getElementById(
 "vpn-"+id
 ).value;
 
-const video =
+req.video =
 document.getElementById(
 "video-"+id
 ).value;
 
-await fetch(
-"https://YOUR-WORKER.workers.dev/admin/approve",
-{
-method:"POST",
-headers:{
-"Content-Type":"application/json",
-Authorization:
-"Bearer "+token
-},
-body:JSON.stringify({
-id,
-vpn,
-video
-})
-}
+localStorage.setItem(
+"vpn_requests",
+JSON.stringify(data)
 );
 
 loadRequests();
 
+alert(
+"VPN Approved"
+);
+
 }
 
-async function reject(id){
+function reject(id){
 
-const reason =
+const data =
+JSON.parse(
+localStorage.getItem(
+"vpn_requests"
+)
+|| "[]"
+);
+
+const req =
+data.find(
+r=>r.id===id
+);
+
+if(!req){
+
+return;
+
+}
+
+req.status =
+"rejected";
+
+req.reason =
 document.getElementById(
 "reason-"+id
 ).value;
 
-await fetch(
-"https://YOUR-WORKER.workers.dev/admin/reject",
-{
-method:"POST",
-headers:{
-"Content-Type":"application/json",
-Authorization:
-"Bearer "+token
-},
-body:JSON.stringify({
-id,
-reason
-})
-}
+localStorage.setItem(
+"vpn_requests",
+JSON.stringify(data)
 );
 
 loadRequests();
+
+alert(
+"VPN Rejected"
+);
 
 }
 
@@ -269,3 +343,4 @@ loadRequests();
 
 </body>
 </html>
+```
