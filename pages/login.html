@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -139,75 +140,69 @@ Register
 <script>
 
 const form =
-document.getElementById("loginForm");
+document.getElementById(
+"loginForm"
+);
 
 const message =
-document.getElementById("message");
+document.getElementById(
+"message"
+);
 
 form.addEventListener(
 "submit",
-async(e)=>{
+(e)=>{
 
 e.preventDefault();
 
-message.innerHTML =
-"Logging in...";
-
 const email =
-document.getElementById("email").value;
+document.getElementById(
+"email"
+).value;
 
 const password =
-document.getElementById("password").value;
+document.getElementById(
+"password"
+).value;
 
-try{
+const users =
+JSON.parse(
+localStorage.getItem(
+"chips_users"
+)
+|| "[]"
+);
 
-const res =
-await fetch(
-"https://YOUR-WORKER.workers.dev/login",
-{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-email,
-password
-})
+const user =
+users.find(
+u =>
+u.email === email &&
+u.password === password
+);
+
+if(!user){
+
+message.innerHTML =
+"Invalid email or password.";
+
+return;
+
 }
-);
-
-const data =
-await res.json();
-
-if(data.success){
-
-localStorage.setItem(
-"chips_token",
-data.token
-);
 
 localStorage.setItem(
 "chips_user",
-JSON.stringify(data.user)
+JSON.stringify(user)
 );
+
+if(user.role === "admin"){
+
+window.location.href =
+"admin.html";
+
+}else{
 
 window.location.href =
 "dashboard.html";
-
-}
-else{
-
-message.innerHTML =
-data.message ||
-"Invalid login.";
-
-}
-
-}
-catch{
-
-message.innerHTML =
-"Cannot connect to server.";
 
 }
 
@@ -219,3 +214,4 @@ message.innerHTML =
 
 </body>
 </html>
+```
