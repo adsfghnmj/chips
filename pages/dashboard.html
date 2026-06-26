@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,6 +46,9 @@
 
 .buttons{
     margin-top:35px;
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
 }
 
 .vpn-link{
@@ -91,7 +95,11 @@ VPN
 
 <div class="dashboard-card">
 
-<h1>Dashboard</h1>
+<h1>
+
+Dashboard
+
+</h1>
 
 <div id="dashboard">
 
@@ -105,35 +113,63 @@ Loading...
 
 <script>
 
-const token =
+const user =
+JSON.parse(
 localStorage.getItem(
-"chips_token"
+"chips_user"
+)
 );
 
-if(!token){
+if(!user){
 
 window.location.href =
 "login.html";
 
 }
 
-async function loadDashboard(){
+function loadDashboard(){
 
-try{
-
-const res =
-await fetch(
-"https://YOUR-WORKER.workers.dev/dashboard",
-{
-headers:{
-Authorization:
-"Bearer "+token
-}
-}
+const requests =
+JSON.parse(
+localStorage.getItem(
+"vpn_requests"
+)
+|| "[]"
 );
 
-const data =
-await res.json();
+const req =
+requests.find(
+r =>
+r.email === user.email
+);
+
+let status =
+"none";
+
+let vpnLink =
+"";
+
+let video =
+"";
+
+let reason =
+"";
+
+if(req){
+
+status =
+req.status;
+
+vpnLink =
+req.vpnLink;
+
+video =
+req.video;
+
+reason =
+req.reason;
+
+}
 
 document.getElementById(
 "dashboard"
@@ -142,35 +178,45 @@ document.getElementById(
 <div class="info">
 
 Username:
-${data.user.username}
+${user.username}
 
 <br>
 
 Email:
-${data.user.email}
+${user.email}
 
 </div>
 
-<div class="status ${data.status}">
+<div class="status ${status}">
 
-${data.status==="pending" ?
-"🟡 Pending" : ""}
+${status==="pending"
+? "🟡 Pending"
+: ""}
 
-${data.status==="approved" ?
-"🟢 Approved" : ""}
+${status==="approved"
+? "🟢 Approved"
+: ""}
 
-${data.status==="rejected" ?
-"🔴 Rejected" : ""}
+${status==="rejected"
+? "🔴 Rejected"
+: ""}
+
+${status==="none"
+? "No VPN Request"
+: ""}
 
 </div>
 
-${data.status==="approved" ? `
+${status==="approved"
+?
+
+`
 <a
 class="vpn-link"
-href="${data.vpnLink}"
+href="${vpnLink}"
 target="_blank">
 
-${data.vpnLink}
+${vpnLink}
 
 </a>
 
@@ -178,22 +224,33 @@ ${data.vpnLink}
 
 <a
 class="glass-btn"
-href="${data.video}"
+href="${video}"
 target="_blank">
 
 Tutorial Video
 
 </a>
-` : ""}
+`
 
-${data.status==="rejected" ? `
+:
+
+""}
+
+${status==="rejected"
+?
+
+`
 <div class="reason">
 
 Reason:
-${data.reason}
+${reason}
 
 </div>
-` : ""}
+`
+
+:
+
+""}
 
 <div class="buttons">
 
@@ -227,16 +284,6 @@ Back Home
 `;
 
 }
-catch{
-
-document.getElementById(
-"dashboard"
-).innerHTML =
-"Cannot connect to server.";
-
-}
-
-}
 
 loadDashboard();
 
@@ -246,3 +293,4 @@ loadDashboard();
 
 </body>
 </html>
+```
