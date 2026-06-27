@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<title>Admin | CHIPS</title>
+
+<link rel="stylesheet" href="../style.css">
+
+<style>
+
+.admin-card{
+width:1000px;
+max-width:95%;
+padding:40px;
+border-radius:30px;
+background:rgba(255,255,255,.08);
+backdrop-filter:blur(25px);
+border:1px solid rgba(255,255,255,.15);
+}
+
+.request{
+margin-top:25px;
+padding:25px;
+border-radius:20px;
+background:rgba(255,255,255,.05);
+}
+
+.request p{
+margin:10px 0;
+}
+
+input{
+width:100%;
+padding:14px;
+margin-top:10px;
+border:none;
+outline:none;
+border-radius:15px;
+background:rgba(255,255,255,.08);
+color:white;
+}
+
+.buttons{
+margin-top:20px;
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="background-grid"></div>
+<div class="mouse-light"></div>
+
+<header class="navbar">
+
+<div class="logo">
+
+CHIPS
+
+</div>
+
+<nav>
+
+<a href="../index.html">
+
+Home
+
+</a>
+
+</nav>
+
+</header>
+
+<section class="hero">
+
+<div class="admin-card">
+
+<h1>
+
+Admin Panel
+
+</h1>
+
+<div id="requests">
+
+Loading...
+
+</div>
+
+</div>
+
+</section>
+
+<script>
+
+const token =
+localStorage.getItem(
+"chips_token"
+);
+
+if(!token){
+
+window.location.href =
+"login.html";
+
+}
+
+async function loadRequests(){
+
+const res =
+await fetch(
+"https://YOUR-WORKER.workers.dev/admin",
+{
+headers:{
+Authorization:
+"Bearer "+token
+}
+}
+);
+
+const data =
+await res.json();
+
+let html = "";
+
+data.requests.forEach(r=>{
+
+html += `
+
+<div class="request">
+
+<p>
+
+Username:
+${r.username}
+
+</p>
+
+<p>
+
+Email:
+${r.email}
+
+</p>
+
+<p>
+
+Status:
+${r.status}
+
+</p>
+
+<input
+id="vpn-${r.id}"
+placeholder="VPN Link">
+
+<input
+id="video-${r.id}"
+placeholder="Tutorial Video Link">
+
+<input
+id="reason-${r.id}"
+placeholder="Reject Reason">
+
+<div class="buttons">
+
+<button
+class="glass-btn vpn-btn"
+onclick="approve(${r.id})">
+
+Approve
+
+</button>
+
+<button
+class="glass-btn donate-btn"
+onclick="reject(${r.id})">
+
+Reject
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"requests"
+).innerHTML = html;
+
+}
+
+async function approve(id){
+
+const vpn =
+document.getElementById(
+"vpn-"+id
+).value;
+
+const video =
+document.getElementById(
+"video-"+id
+).value;
+
+await fetch(
+"https://YOUR-WORKER.workers.dev/admin/approve",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+Authorization:
+"Bearer "+token
+},
+body:JSON.stringify({
+id,
+vpn,
+video
+})
+}
+);
+
+loadRequests();
+
+}
+
+async function reject(id){
+
+const reason =
+document.getElementById(
+"reason-"+id
+).value;
+
+await fetch(
+"https://chips-api.chipsali.workers.dev/admin/reject",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+Authorization:
+"Bearer "+token
+},
+body:JSON.stringify({
+id,
+reason
+})
+}
+);
+
+loadRequests();
+
+}
+
+loadRequests();
+
+</script>
+
+<script src="../script.js"></script>
+
+</body>
+</html>
