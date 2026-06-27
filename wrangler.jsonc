@@ -1,13 +1,14 @@
 {
-  "name": "chips-api",
-  "main": "worker/index.js",
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "chips",
   "compatibility_date": "2026-06-27",
-
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "chips-db",
-      "database_id": "PUT_YOUR_DATABASE_ID_HERE"
-    }
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "."
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
   ]
 }
