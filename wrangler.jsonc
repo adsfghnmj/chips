@@ -1,5 +1,5 @@
 {
-  "name": "chips-api",
+  "name": "chips",
   "main": "worker/index.js",
   "compatibility_date": "2026-06-27",
 
